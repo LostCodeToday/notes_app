@@ -5,11 +5,11 @@ import 'utils/theme_manager.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const NotesApp());
+  runApp(NotesApp());
 }
 
 class NotesApp extends StatelessWidget {
-  const NotesApp({super.key});
+  NotesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,12 @@ class NotesApp extends StatelessWidget {
         builder: (context, themeManager, child) {
           return MaterialApp(
             title: 'Notes App',
-            theme: themeManager.getTheme(),
-            home: const HomeScreen(),
+            // Используем динамическую тему из ThemeManager
+            theme: themeManager.getTheme(context),
+            // Режим темы управляется ThemeManager
+            themeMode: themeManager.themeMode,
+            // Начальный экран без const из-за GlobalKey в HomeScreen
+            home: HomeScreen(),
           );
         },
       ),

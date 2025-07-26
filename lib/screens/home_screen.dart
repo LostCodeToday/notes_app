@@ -3,26 +3,66 @@ import 'package:provider/provider.dart';
 import '../services/note_service.dart';
 import '../widgets/note_card.dart';
 import 'note_screen.dart';
+import '../utils/theme_manager.dart';
+import 'theme_settings_screen.dart'; 
 
+
+// НОВЫЙ РАЗДЕЛ - ДОБАВЛЕНИЕ КЛЮЧА ДЛЯ УПРАВЛЕНИЯ SCAFFOLD
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final noteService = Provider.of<NoteService>(context);
+    final themeManager = Provider.of<ThemeManager>(context);
 
     return Scaffold(
-      // ИЗМЕНЕНИЕ - УБРАТЬ СТАРУЮ КНОПКУ ИЗ ACTIONS
+      key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Notes'),
-        actions: [],
+        title: const Align(
+          alignment: Alignment.centerLeft,
+          child: Text('Notes'),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+          ),
+        ],
+      ),
+      // ИЗМЕНЕНИЕ - ПЕРЕРАБОТКА DRAWER ДЛЯ РАЗДЕЛА THEME
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Text(
+                'Settings',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+            ),
+            ListTile(
+              title: const Text('Theme'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ThemeSettingsScreen()),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       // КОНЕЦ ИЗМЕНЕНИЯ
-      // ИЗМЕНЕНИЕ - ЗАМЕНИТЬ BODY НА STACK ДЛЯ ДОБАВЛЕНИЯ КНОПКИ ВНИЗУ
       body: Stack(
         children: [
           noteService.notes.isEmpty
-              ? const Center(child: Text('No notes yet'))
+              ? const Center()
               : ListView.builder(
                   itemCount: noteService.notes.length,
                   itemBuilder: (context, index) {
@@ -30,7 +70,6 @@ class HomeScreen extends StatelessWidget {
                     return NoteCard(note: note);
                   },
                 ),
-          // ИЗМЕНЕНИЕ - ДОБАВИТЬ КНОПКУ ВНИЗУ ПО ЦЕНТРУ С ТЕНОЙ
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -44,15 +83,13 @@ class HomeScreen extends StatelessWidget {
                 },
                 child: const Icon(Icons.add),
                 backgroundColor: Colors.blue,
-                elevation: 6.0, // Тень
-                shape: const CircleBorder(), // Круглая форма
+                elevation: 6.0,
+                shape: const CircleBorder(),
               ),
             ),
           ),
-          // КОНЕЦ ИЗМЕНЕНИЯ
         ],
       ),
-      // КОНЕЦ ИЗМЕНЕНИЯ
     );
   }
 }
