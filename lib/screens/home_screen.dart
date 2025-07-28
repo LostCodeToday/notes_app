@@ -19,46 +19,6 @@ class HomeScreen extends StatelessWidget {
     final themeManager = Provider.of<ThemeManager>(context);
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Align(
-          alignment: Alignment.centerLeft,
-          child: Text('Notes'),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              _scaffoldKey.currentState?.openDrawer();
-            },
-          ),
-        ],
-      ),
-      // ИЗМЕНЕНИЕ - ПЕРЕРАБОТКА DRAWER ДЛЯ РАЗДЕЛА THEME
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Text(
-                'Settings',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              title: const Text('Theme'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const ThemeSettingsScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      // КОНЕЦ ИЗМЕНЕНИЯ
       body: Stack(
         children: [
           noteService.notes.isEmpty
@@ -71,9 +31,9 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
           Align(
-            alignment: Alignment.bottomCenter,
+            alignment: Alignment.bottomCenter   ,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 80.0),
+              padding: const EdgeInsets.only(bottom: 30.0),
               child: FloatingActionButton(
                 onPressed: () {
                   Navigator.push(
